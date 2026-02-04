@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Remote Bel Sekolah</h2>
+    <input type="text" id="jam" placeholder="Contoh: 07:30">
+    <input type="text" id="keterangan" placeholder="Contoh: Masuk Kelas">
+    <button onclick="updateJadwal()">Kirim ke Bel</button>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+      import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+
+      const firebaseConfig = {
+        // ... COPY DARI FIREBASE CONSOLE KAMU ...
+        apiKey: "AIzaSyB...",
+        authDomain: "proyek-bel.firebaseapp.com",
+        databaseURL: "https://proyek-bel-default-rtdb.firebaseio.com",
+        projectId: "proyek-bel",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      window.updateJadwal = function() {
+          const jam = document.getElementById('jam').value;
+          const ket = document.getElementById('keterangan').value;
+          
+          // Kirim ke Firebase path /jadwal_harian
+          set(ref(db, 'jadwal_harian'), {
+              waktu: jam,
+              pesan: ket,
+              update_at: Date.now() // timestamp agar STB tahu ada perubahan
+          }).then(() => {
+              alert("Data Terkirim!");
+          });
+      }
+    </script>
+</body>
+</html>
